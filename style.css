@@ -1,0 +1,483 @@
+:root {
+    color-scheme: dark;
+    --surface: #15191f;
+    --surface-raised: #1b2028;
+    --border: #303742;
+    --muted: #929ba8;
+    --text: #e8ebf0;
+    --accent: #a6b7cc;
+    --danger: #e17c7c;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at 50% 0%, #1b2430 0%, transparent 55%), #0d0f12;
+    color: var(--text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 14px;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    color: inherit;
+}
+
+button:focus-visible,
+input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    min-height: 64px;
+    padding: 0 6%;
+}
+
+.connection {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #8b929b;
+}
+
+.controller {
+    width: min(760px, calc(100% - 32px));
+    margin: 56px auto 80px;
+}
+
+.intro {
+    margin-bottom: 22px;
+}
+
+.eyebrow {
+    margin: 0;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    line-height: 1.6;
+}
+
+.control-panel {
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: rgb(19 22 27 / 88%);
+    box-shadow: 0 24px 70px rgb(0 0 0 / 14%);
+}
+
+.panel-heading {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.panel-heading h2 {
+    flex: 1;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 550;
+    letter-spacing: -0.025em;
+}
+
+.power-button,
+.preview-button,
+.lift-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 40px;
+    padding: 9px 13px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface-raised);
+    cursor: pointer;
+    transition: background 160ms ease, border-color 160ms ease;
+}
+
+.power-button[aria-pressed="true"],
+.lift-button[aria-pressed="true"] {
+    border-color: #668c78;
+    background: rgb(102 140 120 / 12%);
+}
+
+.power-indicator,
+.lift-indicator {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    border-radius: 50%;
+    background: var(--muted);
+}
+
+.power-button[aria-pressed="true"] .power-indicator,
+.lift-button[aria-pressed="true"] .lift-indicator {
+    background: #79c49a;
+}
+
+.preview-button {
+    background: transparent;
+    color: var(--muted);
+}
+
+button:disabled,
+input:disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+}
+
+.interface-view[hidden] {
+    display: none !important;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.control-card,
+.lift-card,
+.joystick-card {
+    min-width: 0;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+}
+
+.control-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.control-title label,
+.lift-label {
+    font-weight: 550;
+}
+
+output {
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.lift-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 14px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+}
+
+.lift-description {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.lift-detail {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.secondary-layout {
+    display: grid;
+    grid-template-columns: minmax(100px, 0.65fr) minmax(0, 1.8fr);
+    gap: 14px;
+    align-items: stretch;
+}
+
+.lift-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 12px;
+}
+
+.lift-slider-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+}
+
+.vertical-slider-wrap {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 240px;
+    padding: 8px 0;
+}
+
+.vertical-endpoint {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+#lift-slider {
+    width: 220px;
+    height: 32px;
+    margin: 0;
+    transform: rotate(-90deg);
+    transform-origin: center;
+}
+
+.joystick-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 12px;
+}
+
+.joystick-instructions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    font-size: 12px;
+}
+
+.joystick {
+    position: relative;
+    width: min(100%, 280px);
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 1px solid #39414d;
+    border-radius: 50%;
+    background: radial-gradient(circle, #1c222b 0%, #15191f 72%);
+    touch-action: none;
+    user-select: none;
+}
+
+.joystick-axis {
+    position: absolute;
+    background: #343c47;
+    pointer-events: none;
+}
+
+.horizontal-axis {
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+}
+
+.vertical-axis {
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 100%;
+}
+
+.joystick-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #657181;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.joystick-knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 48px;
+    height: 48px;
+    border: 1px solid #647386;
+    border-radius: 50%;
+    background: #293341;
+    box-shadow: 0 5px 18px rgb(0 0 0 / 35%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.joystick-legend {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.joystick-help {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+}
+
+.stop-button {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 18px;
+    border: 1px solid #633b3e;
+    border-radius: 11px;
+    background: rgb(129 61 61 / 12%);
+    color: var(--danger);
+    cursor: pointer;
+}
+
+.notice {
+    margin: 16px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+@media (max-width: 560px) {
+    .controller {
+        margin-top: 30px;
+    }
+
+    .control-panel {
+        padding: 16px;
+    }
+
+    .panel-heading {
+        gap: 9px;
+    }
+
+    .panel-heading h2 {
+        flex-basis: 100%;
+        margin-bottom: 5px;
+    }
+
+    .controls {
+        grid-template-columns: 1fr;
+    }
+
+    .secondary-layout {
+        grid-template-columns: 88px minmax(0, 1fr);
+        gap: 9px;
+    }
+
+    .lift-card {
+        padding: 14px 6px;
+    }
+
+    .joystick-card {
+        padding: 14px 8px;
+    }
+
+    .joystick-knob {
+        width: 42px;
+        height: 42px;
+    }
+
+    .joystick-instructions {
+        font-size: 11px;
+    }
+
+    .lift-control {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .lift-button {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Secondary preview: true vertical lift slider */
+.vertical-slider-wrap {
+    width: 100%;
+    min-width: 0;
+    min-height: 240px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+#lift-slider {
+    appearance: slider-vertical;
+    -webkit-appearance: slider-vertical;
+    writing-mode: vertical-lr;
+    direction: rtl;
+    width: 32px;
+    height: 190px;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    transform: none;
+    accent-color: var(--accent);
+    touch-action: none;
+}
+
+#lift-slider:disabled {
+    opacity: 0.42;
+}
+
+@media (max-width: 560px) {
+    #lift-slider {
+        height: 170px;
+    }
+}

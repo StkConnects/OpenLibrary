@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OpenRemote — an open-source remote control interface.">
+    <title>OpenRemote</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="connection">
+            <span class="status-dot"></span>
+            <span id="connection-status">Disconnected</span>
+        </div>
+    </header>
+
+    <main class="controller">
+        <section class="intro">
+            <p class="eyebrow" id="interface-heading">
+                CONTROLLER INTERFACE / MAIN
+            </p>
+        </section>
+
+        <section class="control-panel" aria-label="Remote controls">
+            <div class="panel-heading">
+                <h2>Manual control</h2>
+
+                <button id="power-button" class="power-button"
+                    type="button" aria-pressed="false">
+                    <span class="power-indicator"></span>
+                    <span id="power-label">Start</span>
+                </button>
+
+                <button id="preview-button" class="preview-button"
+                    type="button">
+                    Change preview
+                </button>
+            </div>
+
+            <!-- MAIN PREVIEW -->
+            <section id="main-interface" class="interface-view">
+                <div class="controls">
+                    <section class="control-card">
+                        <div class="control-title">
+                            <label for="throttle">Thrust</label>
+                            <output id="throttle-value" for="throttle">0%</output>
+                        </div>
+
+                        <input id="throttle" type="range"
+                            min="0" max="100" value="0" disabled>
+
+                        <div class="range-labels">
+                            <span>0%</span>
+                            <span>100%</span>
+                        </div>
+                    </section>
+
+                    <section class="control-card">
+                        <div class="control-title">
+                            <label for="steering">Direction</label>
+                            <output id="steering-value" for="steering">0°</output>
+                        </div>
+
+                        <input id="steering" type="range"
+                            min="-45" max="45" value="0" disabled>
+
+                        <div class="range-labels">
+                            <span>Left −45°</span>
+                            <span>Right +45°</span>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="lift-control">
+                    <div class="lift-description">
+                        <span class="lift-label">Lift motor</span>
+                        <span class="lift-detail">Toggle output: 100%</span>
+                    </div>
+
+                    <button id="lift-button" class="lift-button"
+                        type="button" aria-pressed="false" disabled>
+                        <span class="lift-indicator"></span>
+                        <span id="lift-label">Lift OFF</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- SECONDARY PREVIEW -->
+            <section id="secondary-interface"
+                class="interface-view secondary-layout" hidden>
+
+                <section class="lift-card">
+                    <div class="lift-slider-heading">
+                        <span class="lift-label">Lift</span>
+                        <output id="lift-value" for="lift-slider">0%</output>
+                    </div>
+
+                    <div class="vertical-slider-wrap">
+                        <span class="vertical-endpoint">100%</span>
+                        <input id="lift-slider" type="range"
+                            min="0" max="100" value="0"
+                            orient="vertical" disabled
+                            aria-label="Lift motor power">
+                        <span class="vertical-endpoint">0%</span>
+                    </div>
+
+                    <span class="lift-detail">Lift motor</span>
+                </section>
+
+                <section class="joystick-card">
+                    <div class="joystick-instructions">
+                        <span>Thrust + direction</span>
+                        <output id="joystick-value">0%, 0°</output>
+                    </div>
+
+                    <div id="joystick" class="joystick"
+                        role="group"
+                        aria-label="Joystick: move up for thrust and left or right to steer">
+                        <span class="joystick-axis horizontal-axis"></span>
+                        <span class="joystick-axis vertical-axis"></span>
+                        <span class="joystick-center"></span>
+                        <span id="joystick-knob" class="joystick-knob"></span>
+                    </div>
+
+                    <div class="joystick-legend">
+                        <span>−45° Left</span>
+                        <span>+45° Right</span>
+                    </div>
+
+                    <p class="joystick-help">
+                        Up: thrust · Left/right: direction
+                    </p>
+                </section>
+            </section>
+
+            <button id="stop-button" class="stop-button" type="button">
+                Emergency stop
+            </button>
+
+            <p class="notice" id="control-notice" role="status">
+                Preview off — no device connected.
+            </p>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
