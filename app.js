@@ -20,14 +20,49 @@ const joystick = document.querySelector("#joystick");
 const joystickKnob = document.querySelector("#joystick-knob");
 const joystickValue = document.querySelector("#joystick-value");
 
+const connectionStatus = document.querySelector("#connection-status");
 const stopButton = document.querySelector("#stop-button");
 const notice = document.querySelector("#control-notice");
 
 let isPowered = false;
+let isConnected = false;
+let isConnecting = false;
+
+function handleConnectionStatus(status) {
+    connectionStatus.textContent = status;
+    isConnected = status.startsWith("Connected");
+    isConnecting = status === "Connecting";
+
+    if (isConnected) {
+        setPower(true);
+    } else if (!isConnecting && isPowered) {
+        setPower(false);
+    }
+}
+
+function handleConnectionMessage(message) {
+    if (message.type === "status" && message.connected) {
+        connectionStatus.textContent =
+            message.simulated ? "Connected (Simulator)" : "Connected";
+    }
+}
 let isLiftOn = false;
 let isSecondary = false;
 let isDragging = false;
 let activePointerId = null;
+
+function sendCurrentControls() {
+    if (!isConnected || !isPowered) return;
+
+    sendDeviceCommand({
+        type: "control",
+        thrust: Number(throttle.value),
+        lift: isSecondary
+            ? Number(liftSlider.value)
+            : (isLiftOn ? 100 : 0),
+        steering: Number(steering.value)
+    });
+}
 
 function updateMovementValues() {
     throttleValue.textContent = `${throttle.value}%`;
@@ -35,18 +70,7 @@ function updateMovementValues() {
 }
 
 function updateNotice() {
-    if (!isPowered) {
-        notice.textContent = "Preview off — no device connected.";
-        return;
-    }
-
-    const lift = isSecondary
-        ? `${liftSlider.value}%`
-        : (isLiftOn ? "100%" : "OFF");
-
-    notice.textContent =
-        `Preview only — Thrust ${throttle.value}%, ` +
-        `Direction ${steering.value}°, Lift ${lift}. No device connected.`;
+    notice.textContent = "";
 }
 
 function resetJoystickPosition() {
@@ -93,7 +117,18 @@ function setPower(enabled) {
 }
 
 powerButton.addEventListener("click", () => {
-    setPower(!isPowered);
+    if (isPowered) {
+        sendDeviceCommand({ type: "stop" });
+        disconnectDevice();
+        isConnected = false;
+        isConnecting = false;
+        connectionStatus.textContent = "Disconnected";
+        setPower(false);
+        return;
+    }
+
+    if (isConnected || isConnecting) return;
+    connectDevice(handleConnectionStatus, handleConnectionMessage);
 });
 
 previewButton.addEventListener("click", () => {
@@ -113,11 +148,13 @@ previewButton.addEventListener("click", () => {
 throttle.addEventListener("input", () => {
     updateMovementValues();
     updateNotice();
+    sendCurrentControls();
 });
 
 steering.addEventListener("input", () => {
     updateMovementValues();
     updateNotice();
+    sendCurrentControls();
 });
 
 liftButton.addEventListener("click", () => {
@@ -125,11 +162,13 @@ liftButton.addEventListener("click", () => {
 
     setLiftButton(!isLiftOn);
     updateNotice();
+    sendCurrentControls();
 });
 
 liftSlider.addEventListener("input", () => {
     liftValue.textContent = `${liftSlider.value}%`;
     updateNotice();
+    sendCurrentControls();
 });
 
 function moveJoystick(event) {
@@ -171,9 +210,14 @@ function moveJoystick(event) {
         `${50 + (boundedY / bounds.height) * 100}%`;
 
     const direction = Math.round((boundedX / maxX) * 45);
-    const speed = Math.round(
-        Math.min(1, Math.hypot(boundedX / maxX, boundedY / maxY)) * 100
+    const radialDistance = Math.min(
+        1,
+        Math.hypot(boundedX / maxX, boundedY / maxY)
     );
+
+    const speed = boundedY < 0
+        ? Math.round(radialDistance * 100)
+        : 0;
 
     throttle.value = speed;
     steering.value = direction;
@@ -181,6 +225,7 @@ function moveJoystick(event) {
     updateMovementValues();
     joystickValue.textContent = `${speed}%, ${direction}°`;
     updateNotice();
+    sendCurrentControls();
 }
 
 joystick.addEventListener("pointerdown", (event) => {
@@ -215,6 +260,7 @@ function releaseJoystick(event) {
     resetJoystickPosition();
     updateMovementValues();
     updateNotice();
+    sendCurrentControls();
 }
 
 joystick.addEventListener("pointerup", releaseJoystick);
@@ -222,13 +268,18 @@ joystick.addEventListener("pointercancel", releaseJoystick);
 joystick.addEventListener("lostpointercapture", releaseJoystick);
 
 stopButton.addEventListener("click", () => {
+    if (isConnected) {
+        sendDeviceCommand({ type: "stop" });
+    }
+
     resetMovement();
     setLiftButton(false);
     liftSlider.value = 0;
     liftValue.textContent = "0%";
 
-    notice.textContent =
-        "Preview controls reset — no device commands were sent.";
+    notice.textContent = isConnected
+        ? "Emergency stop sent to simulator."
+        : "Controls reset — simulator is disconnected.";
 });
 
 liftValue.textContent = `${liftSlider.value}%`;

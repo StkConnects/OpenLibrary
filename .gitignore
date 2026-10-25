@@ -2,3 +2,4 @@
 # Local backups
 *.bak
 *.before-*
+node_modules/

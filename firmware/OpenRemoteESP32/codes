@@ -1,0 +1,4 @@
+cd ~/Projects/openremote/firmware/OpenRemoteESP32
+arduino-cli compile --fqbn esp32:esp32:esp32 OpenRemoteESP32.ino
+arduino-cli upload -p /dev/ttyUSB0 --fqbn esp32:esp32:esp32 OpenRemoteESP32.ino
+arduino-cli monitor --port /dev/ttyUSB0 --config baudrate=115200

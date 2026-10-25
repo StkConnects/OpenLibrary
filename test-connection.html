@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>OpenRemote Connection Test</title>
+<h2>OpenRemote Simulator Test</h2>
+<p id="status">Disconnected</p>
+<button id="connect">Connect</button>
+<button id="send">Send Test Command</button>
+<pre id="log"></pre>
+<script>
+let ws;
+const status = document.querySelector("#status");
+const log = document.querySelector("#log");
+
+document.querySelector("#connect").onclick = () => {
+  ws = new WebSocket("ws://127.0.0.1:8765/ws");
+  ws.onopen = () => status.textContent = "Connected";
+  ws.onmessage = e => log.textContent += e.data + "\n";
+  ws.onclose = () => status.textContent = "Disconnected";
+  ws.onerror = () => status.textContent = "Connection error";
+};
+
+document.querySelector("#send").onclick = () => {
+  if (ws?.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({
+      type: "control",
+      thrust: 25,
+      lift: 50,
+      steering: 10
+    }));
+  } else {
+    log.textContent += "Connect first.\n";
+  }
+};
+</script>
+</html>
