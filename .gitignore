@@ -3,3 +3,6 @@
 *.bak
 *.before-*
 node_modules/
+
+# Timestamped backup files
+*.bak-*

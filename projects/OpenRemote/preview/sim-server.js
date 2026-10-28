@@ -16,7 +16,7 @@ const safeState = () => ({
 
 let state = safeState();
 let lastControlAt = Date.now();
-const CONTROL_TIMEOUT_MS = 1500;
+const CONTROL_TIMEOUT_MS = 60000;
 
 setInterval(() => {
     if (
