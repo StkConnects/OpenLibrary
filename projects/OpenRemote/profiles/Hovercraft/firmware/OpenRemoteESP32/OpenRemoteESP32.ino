@@ -9,7 +9,7 @@
 
 // ---------- Wi-Fi ----------
 const char* AP_SSID = "OpenRemote";
-const char* AP_PASSWORD = "OpenRemote123";
+const char* AP_PASSWORD = "openremote123";
 
 // ---------- Proposed signal pins ----------
 // Confirm these against your actual ESP32 board before wiring.

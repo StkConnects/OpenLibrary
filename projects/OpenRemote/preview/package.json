@@ -1,0 +1,14 @@
+{
+  "name": "openremote-preview",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser preview and WebSocket simulator for OpenRemote.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node sim-server.js"
+  },
+  "type": "commonjs",
+  "dependencies": {
+    "ws": "^8.22.0"
+  }
+}

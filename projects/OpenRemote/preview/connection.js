@@ -1,4 +1,14 @@
-const DEVICE_URL = "ws://192.168.4.1:81/";
+const SIMULATOR_URL = "ws://127.0.0.1:8765/ws";
+const ESP32_URL = "ws://192.168.4.1:81/";
+
+const params = new URLSearchParams(window.location.search);
+const DEVICE_URL = params.get("device") === "esp32"
+    ? ESP32_URL
+    : SIMULATOR_URL;
+
+const CONNECTION_LABEL = DEVICE_URL === ESP32_URL
+    ? "Connected (ESP32)"
+    : "Connected (Simulator)";
 
 let socket = null;
 
@@ -9,7 +19,7 @@ function connectDevice(onStatus, onMessage) {
 
     socket = new WebSocket(DEVICE_URL);
 
-    socket.onopen = () => onStatus("Connected (Simulator)");
+    socket.onopen = () => onStatus(CONNECTION_LABEL);
     socket.onmessage = event => {
         try {
             onMessage(JSON.parse(event.data));
